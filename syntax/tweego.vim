@@ -11,21 +11,32 @@ if exists("b:current_syntax")
 endif
 
 " tweego syntax stuff
-syn keyword tgKeyword if not else set to textbox radiobutton contained
+syn keyword tgKeyword if not else set to print textbox radiobutton contained
 syn keyword tgBool true false contained
 
 syn region tgMacro start="<<" end=">>" contains=tgKeyword,tgVariable,tgString,tgBool,tgNumber
-syn region tgLink start="\[\[" end="\]\]" contains=tgPassageName,tgVariable keepend
+syn region tgLink start="\[\[" end="\]\]" contains=tgLinkedPassage,tgVariable keepend
 syn region tgComment start="<!--" end="-->"
 
-syn match tgPassage "^::.*$" contains=tgPassageName
+syn match tgPassage "^::.*$" contains=tgPassageTitle,tgTag
 syn match tgVariable "[$_]\w*"
 syn match tgString "\(["']\).*\1" contained
 syn match tgNumber "\d\+" contained
 
 " matching passage names in titles and links
-" NOTE: if there's some way to store patterns to variables, it'd be nice here
-syn match tgPassageName "[a-zA-Z0-9 _-]*\([a-zA-Z0-9 _-]*|\)\@!" contained
+" ::x
+syn match tgPassageTitle "::\zs[^|<>:\[\]]*" contained
+" [[x]]
+syn match tgLinkedPassage "\[\[\zs[^|<>]*\ze\]\]" contained
+" [[y|x]]
+syn match tgLinkedPassage "|\zs[^|<>]*\ze\]\]" contained
+" [[y->x]]
+syn match tgLinkedPassage "->\zs[^|<>]*\ze\]\]" contained
+" [[x<-y]]
+syn match tgLinkedPassage "\[\[\zs[^|<>]*\ze<-" contained
+
+" passage tags
+syn match tgTag "\[\zs.*\ze\]" contained
 
 " some markdown
 syn region mdItalic start="//" end="//"
@@ -37,8 +48,10 @@ hi def link tgVariable Identifier
 hi def link tgString String
 hi def link tgBool Boolean
 hi def link tgNumber Number
-hi def link tgPassageName StorageClass
+hi def link tgLinkedPassage StorageClass
+hi def link tgPassageTitle StorageClass
 hi def link tgComment Comment
+hi def link tgTag Function
 
 hi def mdItalic term=italic cterm=italic
 hi def mdBold term=bold cterm=bold
