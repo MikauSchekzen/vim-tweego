@@ -32,7 +32,7 @@ syn region tgLink start="\[\[" end="\]\]" contains=tgLinkedPassage,tgVariable ke
 syn region tgComment start="<!--" end="-->"
 
 syn match tgPassage "^::.*$" contains=tgPassageTitle,tgTag
-syn match tgVariable "[$_]\w*" contained
+syn match tgVariable "^[$_]\w*" contained
 syn match tgString "\(["']\).*\1" contained
 syn match tgNumber "\d\+" contained
 
