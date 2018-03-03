@@ -27,6 +27,7 @@ syn region tgPrimaryMacro start="<<" end=">>" contains=tgVariableKeyword,tgScrip
 syn region tgSecondaryMacro start="<<" end=">>" contains=tgLinkKeyword,tgDOMKeyword,tgAudioKeyword,tgMiscKeyword,tgVariable,tgString,tgBool,tgNumber
 syn region tgInteractiveMacro start="<<" end=">>" contains=tgInteractiveKeyword,tgVariable,tgString,tgBool,tgNumber
 syn region tgControlMacro start="<<" end=">>" contains=tgControlKeyword,tgVariable,tgString,tgBool,tgNumber
+" syn region tgMeow start="<<" end=">>" fold transparent
 
 syn region tgLink start="\[\[" end="\]\]" contains=tgLinkedPassage,tgVariable keepend
 syn region tgComment start="<!--" end="-->"
@@ -51,8 +52,9 @@ syn match tgLinkedPassage "\[\[\zs[^|<>]*\ze<-" contained
 " passage tags
 syn match tgTag "\[\zs.*\ze\]" contained
 
-" Passage region
-syn region tgPassageRegion start="::" end=/[\n\r]\:\:/ fold transparent
+" Folding region
+syn region tgFoldRegion start=/::/ end=/[\n\r]::/ fold transparent
+            \ containedin=ALLBUT
 
 " some markdown
 syn region mdItalic start="//" end="//"
