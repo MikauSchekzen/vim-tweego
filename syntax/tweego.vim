@@ -20,14 +20,12 @@ syn keyword tgLinkKeyword actions back return choice contained
 syn keyword tgDOMKeyword addclass append copy prepend remove removeclass replace toggleclass contained
 syn keyword tgAudioKeyword audio cacheaudio createaudiogroup createplaylist playlist masteraudio removeplaylist waitforaudio contained
 syn keyword tgMiscKeyword goto repeat timed widget contained
-" syn keyword tgKeyword if for switch not else capture set unset remember forget to print button checkbox link linkappend linkprepend linkreplace textbox radiobutton textarea contained run include nobr silently actions back return choice
 syn keyword tgBool true false contained
 
 syn region tgPrimaryMacro start="<<" end=">>" contains=tgVariableKeyword,tgScriptingKeyword,tgDisplayKeyword,tgVariable,tgString,tgBool,tgNumber
 syn region tgSecondaryMacro start="<<" end=">>" contains=tgLinkKeyword,tgDOMKeyword,tgAudioKeyword,tgMiscKeyword,tgVariable,tgString,tgBool,tgNumber
 syn region tgInteractiveMacro start="<<" end=">>" contains=tgInteractiveKeyword,tgVariable,tgString,tgBool,tgNumber
 syn region tgControlMacro start="<<" end=">>" contains=tgControlKeyword,tgVariable,tgString,tgBool,tgNumber
-" syn region tgMeow start="<<" end=">>" fold transparent
 
 syn region tgLink start="\[\[" end="\]\]" contains=tgLinkedPassage,tgVariable keepend
 syn region tgComment start="<!--" end="-->"
@@ -53,8 +51,19 @@ syn match tgLinkedPassage "\[\[\zs[^|<>]*\ze<-" contained
 syn match tgTag "\[\zs.*\ze\]" contained
 
 " Folding region
-syn region tgFoldRegion start=/::/ end=/[\n\r]::/ fold transparent
-            \ containedin=ALLBUT
+function! TweeFold(lnum)
+    let thisline = getline(v:lnum)
+    let nextline = getline(v:lnum + 1)
+    if match(thisline, '^::.*$') >= 0
+        return ">1"
+    elseif match(nextline, '^::.*$') >= 0
+        return "<1"
+    endif
+    return "="
+endfunction
+
+set fdm=expr
+set foldexpr=TweeFold(v:lnum)
 
 " some markdown
 syn region mdItalic start="//" end="//"
