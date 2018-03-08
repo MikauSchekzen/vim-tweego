@@ -62,8 +62,10 @@ function! TweeFold(lnum)
     return "="
 endfunction
 
-set fdm=expr
-set foldexpr=TweeFold(v:lnum)
+if(exists("tweego_fold"))
+    set fdm=expr
+    set foldexpr=TweeFold(v:lnum)
+endif
 
 " some markdown
 syn region mdItalic start="//" end="//"
